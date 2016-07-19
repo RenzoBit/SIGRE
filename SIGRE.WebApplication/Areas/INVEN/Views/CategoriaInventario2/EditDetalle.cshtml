@@ -1,0 +1,76 @@
+﻿@model SIGRE.Models.CategoriaDetalle
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>CategoriaDetalle</legend>
+
+        @Html.HiddenFor(model => model.idcategoriadetalle)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idcategoriainventario)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.idcategoriainventario)
+            @Html.ValidationMessageFor(model => model.idcategoriainventario)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idtipodato)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.idtipodato)
+            @Html.ValidationMessageFor(model => model.idtipodato)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idatributo)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.idatributo)
+            @Html.ValidationMessageFor(model => model.idatributo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idformato)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.idformato)
+            @Html.ValidationMessageFor(model => model.idformato)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nombre)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.nombre)
+            @Html.ValidationMessageFor(model => model.nombre)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.identificador)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.identificador)
+            @Html.ValidationMessageFor(model => model.identificador)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.obligatorio)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.obligatorio)
+            @Html.ValidationMessageFor(model => model.obligatorio)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

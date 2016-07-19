@@ -1,0 +1,72 @@
+﻿@model SIGRE.Models.TipoDatoFormato
+
+@{
+	ViewBag.Title = "Formato de tipo dato";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Formato de tipo dato</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Formato de tipo dato</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idtipodato)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("idtipodato", "Seleccionar tipo de dato")
+            @Html.ValidationMessageFor(model => model.idtipodato)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idformato)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("idformato", "Seleccionar formato")
+            @Html.ValidationMessageFor(model => model.idformato)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.descripcion)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.descripcion, new { data_val = false, @readonly = "readonly" })
+            @Html.ValidationMessageFor(model => model.descripcion)
+        </div>
+
+        <p>
+            <input type="submit" value="Añadir" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.Partial("Index", (System.Collections.Generic.List<SIGRE.Models.TipoDatoFormato>) ViewBag.ltipodatoformato) 
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+	<script type="text/jscript">
+	$(function () {
+		$('#idtipodato').change(function () {
+			$.getJSON('/TipoDatoFormato/FormatoList/' + ($('#idtipodato').val() == '' ? '0' : $('#idtipodato').val()), function (data) {
+				var items = '<option value="">Seleccionar formato</option>';
+				$.each(data, function (i, o) {
+					items += "<option value='" + o.Value + "'>" + o.Text + "</option>";
+				});
+				$('#idformato').html(items);
+				$('#descripcion').val('');
+			});
+			$('#idtipodato').next('span').remove();
+		});
+		$('#idformato').change(function () {
+			$('#descripcion').val($('#idtipodato option:selected').text() + ' ' + $('#idformato option:selected').text());
+			$('#idtipodato').next('span').remove();
+		});
+	});
+	</script>
+}

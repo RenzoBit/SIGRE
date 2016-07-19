@@ -1,0 +1,124 @@
+﻿@model SIGRE.Models.Perfil
+
+@{
+    ViewBag.Title = "Nuevo perfil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Nuevo perfil</h2>
+
+@using (Html.BeginForm("Create", "Perfil", FormMethod.Post, new { id = "form1" })) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Nuevo perfil</legend>
+
+        @Html.HiddenFor(model => model.idcolaborador)
+		@Html.HiddenFor(model => model.aprobado)
+		@Html.HiddenFor(model => model.asignado)
+		@Html.Hidden("forzar", "0")
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idcentrocosto)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("idcentrocosto", "Seleccionar unidad de negocio")
+            @Html.ValidationMessageFor(model => model.idcentrocosto)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idcolaborador)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.propietario_nombre, new { @readonly = "readonly" })
+            @Html.ValidationMessageFor(model => model.idcolaborador)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nombre)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.nombre, new { data_val = false })
+            @Html.ValidationMessageFor(model => model.nombre)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.descripcion)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.descripcion, new { data_val = false })
+            @Html.ValidationMessageFor(model => model.descripcion)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.costo)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.costo, new { @readonly = "readonly" })
+            @Html.ValidationMessageFor(model => model.costo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.desactivado)
+        </div>
+        <div class="editor-field">
+            @Html.CheckBoxFor(model => model.desactivado, new { onclick = "javascript: return false;" })
+            @Html.ValidationMessageFor(model => model.desactivado)
+        </div>
+
+        <div class="editor-label">&nbsp;</div>
+        <div class="editor-field">
+            @Html.ListBox("idrecurso[]", (MultiSelectList) ViewBag.idrecurso)
+            <br />@Html.ValidationMessageFor(model => model.aprobado)
+        </div>
+
+        <p>
+			<input type="submit" value="Solicitar aprobación" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Cancelar", "Index")
+</div>
+
+@Styles.Render("~/Content/multi-select.css")
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Scripts/jquery.multi-select.js")
+	<script type="text/javascript">
+	$(function () {
+		$('#idrecurso__').multiSelect({
+			selectableHeader: '<div class="custom-header">Recursos</div>',
+			selectionHeader: '<div class="custom-header">Perfil</div>',
+			afterSelect: function (values) {
+				$('#costo').val((parseFloat($('#costo').val()) + parseFloat($('#idrecurso__ option[value=' + values + ']').text().split('|')[1].substring(5))).toFixed(2));
+			},
+			afterDeselect: function (values) {
+				$('#costo').val((parseFloat($('#costo').val()) - parseFloat($('#idrecurso__ option[value=' + values + ']').text().split('|')[1].substring(5))).toFixed(2));
+			}
+		});
+		$('#idcentrocosto').change(function () {
+			if ($('#idcentrocosto').val() == '') {
+				$('#idcolaborador').val('');
+				$('#propietario_nombre').val('');
+			} else {
+				$.ajax({
+					url: '/ADMIN/Colaborador/Aprobador?id=' + $('#idcentrocosto').val(),
+					type: 'GET',
+					dataType: 'text',
+					success: function (data) {
+						$('#idcolaborador').val(data.split('|')[0]);
+						$('#propietario_nombre').val(data.split('|')[1]);
+					}
+				});
+			}
+		});
+		if ($('#form1').data('validator')) {
+			$('#form1').data('validator').settings.onkeyup = false;
+		}
+	});
+	</script>
+}

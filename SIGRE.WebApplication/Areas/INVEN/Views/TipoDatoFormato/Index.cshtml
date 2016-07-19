@@ -1,0 +1,34 @@
+﻿@model IEnumerable<SIGRE.Models.TipoDatoFormato>
+
+@if (Model.Count() > 0) {
+
+<table class="rvtabla">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.idtipodato)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.idformato)
+        </th>
+        <th>Opciones</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.tipodato.descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.formato)
+        </td>
+        <td>
+			@if (item.lcategoriadetalle.Count() == 0) {
+            @Html.ActionLink("Eliminar", "Delete", new { idtipodato = item.idtipodato, idformato = item.idformato }, new { onclick = "return confirm('¿Está seguro que desea eliminar el formato de tipo de dato seleccionado?');" })
+			}
+        </td>
+    </tr>
+}
+
+</table>
+
+}

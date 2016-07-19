@@ -1,0 +1,79 @@
+﻿@model SIGRE.Models.CategoriaDetalle
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>CategoriaDetalle</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.categoriainventario.nombre)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.categoriainventario.nombre)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.tipodato.descripcion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.tipodato.descripcion)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.tipodatoatributo.descripcion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.tipodatoatributo.descripcion)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.tipodatoformato.descripcion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.tipodatoformato.descripcion)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.nombre)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.nombre)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.identificador)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.identificador)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.obligatorio)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.obligatorio)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.muestraIdentificador)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.muestraIdentificador)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.muestraObligatorio)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.muestraObligatorio)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.idcategoriadetalle }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

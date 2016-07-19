@@ -1,0 +1,49 @@
+﻿@model IEnumerable<SIGRE.Models.Recurso>
+
+@{
+    ViewBag.Title = "Aprobación de recursos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Aprobación de recursos</h2>
+
+@if (Model.Count() > 0) {
+
+<table class="rvtabla">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.idcolaborador)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.costo)
+        </th>
+        <th>Opciones</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.propietario.muestraCodigoNombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.costo)
+        </td>
+        <td>
+            @Html.ActionLink("Aprobar", "DeleteAprobar", new { id = item.idrecurso }, new { onclick = "return confirm('¿Está seguro que desea aprobar el recurso?');" }) | 
+            @Html.ActionLink("Rechazar", "DeleteAprobar", new { id = -item.idrecurso }, new { onclick = "return confirm('¿Está seguro que desea rechazar el recurso?');" }) | 
+            @Html.ActionLink("Ver", "EditAprobar", new { id = item.idrecurso })
+        </td>
+    </tr>
+}
+
+</table>
+
+} else {
+	@Html.Raw("No existen más aprobaciones de recursos pendientes")
+}

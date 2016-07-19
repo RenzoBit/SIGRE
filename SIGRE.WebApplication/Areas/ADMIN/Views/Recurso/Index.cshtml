@@ -1,0 +1,77 @@
+﻿@model IEnumerable<SIGRE.Models.Recurso>
+
+@{
+    ViewBag.Title = "Gestionar recursos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Gestionar recursos</h2>
+
+<p>
+    @Html.ActionLink("Nuevo", "Create")
+</p>
+
+@using (Html.BeginForm("Index", "Recurso", FormMethod.Post)) {
+
+    <fieldset>
+        <legend>Búsqueda</legend>
+
+		<table>
+			<tr>
+				<td>
+		<div class="editor-label">@Html.Label("Nombre", new { @for = "nombre" })</div>
+				</td>
+				<td>
+        <div class="editor-field">@Html.TextBox("nombre", Session["p_nombre"] == null ? "" : Session["p_nombre"])</div>
+				</td>
+				<td><input type="submit" value="Buscar" /></td>
+			</tr>
+		</table>
+    </fieldset>
+}
+
+@if (Model.Count() > 0) {
+
+<table class="rvtabla">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.idcolaborador)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.aprobado)
+        </th>
+        <th>Opciones</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.propietario.muestraCodigoNombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.muestraEstado)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id = item.idrecurso })
+			@if(item.lperfilrecurso.Count() > 0) {
+				if(!item.desactivado) {
+			<text> | </text>
+            @Html.ActionLink("Eliminar", "Delete", new { id = -item.idrecurso }, new { onclick = "return (confirm('¿Está seguro que desea eliminar el recurso seleccionado?') ? confirm('El recurso que está intentando eliminar se encuentra en uso. No es posible eliminar el recurso. ¿Desea desactivarlo?') : false);" })
+				}
+			} else {
+			<text> | </text>
+            @Html.ActionLink("Eliminar", "Delete", new { id = item.idrecurso }, new { onclick = "return confirm('¿Está seguro que desea eliminar el recurso seleccionado?');" })
+			}
+        </td>
+    </tr>
+}
+
+</table>
+
+}

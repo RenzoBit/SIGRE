@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIGRE.WebApplication", "SIGRE.WebApplication\SIGRE.WebApplication.csproj", "{F65C5E1C-E62D-4123-A98C-3705985E488E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIGRE.Models", "SIGRE.Models\SIGRE.Models.csproj", "{F9560D76-6037-43B0-B4F6-25F5706190C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SIGRE.Controllers", "SIGRE.Controllers\SIGRE.Controllers.csproj", "{4D9A3C0D-903B-4FEF-882C-8CE4B9FB2598}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F65C5E1C-E62D-4123-A98C-3705985E488E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F65C5E1C-E62D-4123-A98C-3705985E488E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F65C5E1C-E62D-4123-A98C-3705985E488E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F65C5E1C-E62D-4123-A98C-3705985E488E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9560D76-6037-43B0-B4F6-25F5706190C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9560D76-6037-43B0-B4F6-25F5706190C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9560D76-6037-43B0-B4F6-25F5706190C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9560D76-6037-43B0-B4F6-25F5706190C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D9A3C0D-903B-4FEF-882C-8CE4B9FB2598}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D9A3C0D-903B-4FEF-882C-8CE4B9FB2598}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D9A3C0D-903B-4FEF-882C-8CE4B9FB2598}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D9A3C0D-903B-4FEF-882C-8CE4B9FB2598}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

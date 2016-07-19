@@ -1,0 +1,121 @@
+﻿@model SIGRE.Models.CentroCosto
+
+@{
+	ViewBag.Title = "Editar centro de costo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Editar centro de costo</h2>
+
+@using (Html.BeginForm("Edit", "CentroCosto", FormMethod.Post, new { id = "form1" })) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Editar centro de costo</legend>
+
+        @Html.HiddenFor(model => model.idcentrocosto)
+		@Html.HiddenFor(model => model.idcolaborador)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.codigo)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.codigo, new { data_val = false })
+            @Html.ValidationMessageFor(model => model.codigo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nombre)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.nombre, new { data_val = false })
+            @Html.ValidationMessageFor(model => model.nombre)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.centrocosto_idcentrocosto)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("centrocosto_idcentrocosto", "UN padre")
+            @Html.ValidationMessageFor(model => model.centrocosto_idcentrocosto)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idcolaborador)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.colaborador_nombre)
+            @Html.ValidationMessageFor(model => model.idcolaborador)
+        </div>
+
+        <div class="editor-label">
+            <label>Desactivado</label>
+        </div>
+        <div class="editor-field">
+            @Html.CheckBoxFor(model => model.desactivado, new { onclick = "javascript: return false;" })
+            @Html.ValidationMessageFor(model => model.desactivado)
+        </div>
+
+        <p>
+            <input id="botoncito" type="button" value="Guardar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Cancelar", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/jqueryui")
+
+<script type="text/javascript">
+$(function () {
+	$('#colaborador_nombre').autocomplete({
+		source: function (request, response) {
+			$.ajax({
+				url: '/CentroCosto/PropietarioList',
+				type: 'POST',
+				dataType: 'json',
+				data: { term: request.term },
+				success: function (data) {
+					response($.map(data, function (item) {
+						return {
+							label: item.codigo + ' | ' + item.nombre,
+							value: item.idcolaborador,
+							nombre: item.nombre
+						};
+					}));
+					$('#idcolaborador').val('');
+				}
+			});
+		},
+		select: function (event, ui) {
+			$('#colaborador_nombre').val(ui.item.nombre);
+			$('#idcolaborador').val(ui.item.value);
+			return false;
+		}
+	});
+	$('#botoncito').click(function () {
+		if ($('#colaborador_nombre').val().length > 0)
+			$.ajax({
+				url: '/CentroCosto/Propietario?term=' + $('#colaborador_nombre').val(),
+				type: 'GET',
+				dataType: 'text',
+				success: function (data) {
+					if (data.split('|')[0] != '0') {
+						$('#colaborador_nombre').val(data.split('|')[1]);
+						$('#idcolaborador').val(data.split('|')[0]);
+					}
+					$('#form1').submit();
+				}
+			});
+		else
+			$('#form1').submit();
+	});
+});
+</script>
+
+}

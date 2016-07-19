@@ -1,0 +1,62 @@
+﻿@model SIGRE.Models.CategoriaInventario
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>CategoriaInventario</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.categoriainventariotipo.descripcion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.categoriainventariotipo.descripcion)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.nombre)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.nombre)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.descripcion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.descripcion)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.desactivado)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.desactivado)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.multiple)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.multiple)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.utilizada)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.utilizada)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

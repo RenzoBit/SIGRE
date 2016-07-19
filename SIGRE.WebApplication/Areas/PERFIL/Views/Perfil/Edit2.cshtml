@@ -1,0 +1,114 @@
+﻿@model SIGRE.Models.Perfil
+
+@{
+    ViewBag.Title = "Aprobar perfil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Aprobar perfil</h2>
+
+@using (Html.BeginForm("Edit2", "Perfil", FormMethod.Post, new { id = "form1" })) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Aprobar perfil</legend>
+
+        @Html.HiddenFor(model => model.idperfil)
+		@Html.HiddenFor(model => model.idcolaborador)
+		@Html.HiddenFor(model => model.aprobado)
+		@Html.HiddenFor(model => model.asignado)
+		@Html.HiddenFor(model => model.idcentrocosto)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idcentrocosto)
+        </div>
+        <div class="editor-field">
+			@Html.DropDownList("idcentrocosto", null, "Seleccionar unidad de negocio", new { disabled = "disabled" })
+            @Html.ValidationMessageFor(model => model.idcentrocosto)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idcolaborador)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.propietario_nombre, new { @readonly = "readonly" })
+            @Html.ValidationMessageFor(model => model.idcolaborador)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nombre)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.nombre, new { @readonly = "readonly" })
+            @Html.ValidationMessageFor(model => model.nombre)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.descripcion)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.descripcion, new { @readonly = "readonly" })
+            @Html.ValidationMessageFor(model => model.descripcion)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.costo)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.costo, new { @readonly = "readonly" })
+            @Html.ValidationMessageFor(model => model.costo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.desactivado)
+        </div>
+        <div class="editor-field">
+            @Html.CheckBoxFor(model => model.desactivado, new { onclick = "javascript: return false;" })
+            @Html.ValidationMessageFor(model => model.desactivado)
+        </div>
+
+        <div class="editor-label">&nbsp;</div>
+        <div class="editor-field">
+            @Html.ListBox("idrecurso[]", (MultiSelectList)ViewBag.idrecurso, new { disabled = "disabled" })
+        </div>
+
+        <p>
+            <input id="botoncito1" type="button" value="Aprobar" />
+			<input id="botoncito2" type="button" value="Rechazar" />
+        </p>
+    </fieldset>
+}
+
+<!--
+<div>
+    @Html.ActionLink("Cancelar", "Index")
+</div>
+-->
+
+@Styles.Render("~/Content/multi-select.css")
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Scripts/jquery.multi-select.js")
+	<script type="text/javascript">
+	$(function () {
+		$('#idrecurso__').multiSelect({
+			selectableHeader: '<div class="custom-header">Recursos</div>',
+			selectionHeader: '<div class="custom-header">Perfil</div>'
+		});
+		$('#botoncito1').click(function () {
+			if (confirm('¿Está seguro que desea aprobar el perfil?')) {
+				$('#aprobado').val(true);
+				$('#form1').submit();
+			}
+		});
+		$('#botoncito2').click(function () {
+			if (confirm('¿Está seguro que desea rechazar el perfil?')) {
+				$('#aprobado').val(false);
+				$('#form1').submit();
+			}
+		});
+	});
+	</script>
+}

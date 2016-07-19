@@ -1,0 +1,164 @@
+﻿@model SIGRE.Models.CategoriaInventario
+
+@{
+    ViewBag.Title = "Editar categoría de inventario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Editar categoría de inventario</h2>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Editar categoría de inventario</legend>
+
+        @Html.HiddenFor(model => model.idcategoriainventario)
+		@Html.HiddenFor(model => model.utilizada)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idcategoriainventariotipo)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("idcategoriainventariotipo", "Seleccionar tipo")
+            @Html.ValidationMessageFor(model => model.idcategoriainventariotipo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nombre)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.nombre, new { data_val = false })
+            @Html.ValidationMessageFor(model => model.nombre)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.descripcion)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.descripcion)
+            @Html.ValidationMessageFor(model => model.descripcion)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.desactivado)
+            @Html.CheckBoxFor(model => model.desactivado, new { onclick = "javascript: return false;" })
+            @Html.ValidationMessageFor(model => model.desactivado)
+        </div>
+        <div class="editor-field">
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.multiple)
+            @Html.EditorFor(model => model.multiple)
+            @Html.ValidationMessageFor(model => model.multiple)
+        </div>
+        <div class="editor-field">
+        </div>
+
+        <p>
+            <input type="submit" value="Guardar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Cancelar", "Index")
+	@if (!Model.utilizada) {
+    @Html.ActionLink("Agregar detalle", "CreateDetalle", new { idcategoriadetalle = 0, idcategoriainventario = Model.idcategoriainventario, posicion = 0 }, new { @class = "crea" })
+	}
+	<br /><br />@Html.ValidationMessageFor(model => model.utilizada)
+</div>
+
+<div id="lcategoriadetalle">@{ Html.RenderAction("IndexDetalle"); }</div>
+
+<div id="dialog-edit" style="display: none"></div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryui")
+<script type="text/jscript">
+url = '';
+$(function () {
+	$.ajaxSetup({ cache: false });
+	$('#dialog-edit').dialog({
+		dialogClass: 'dlgfixed',
+		position: 'center',
+		title: 'Detalle de categoría de inventario',
+		autoOpen: false,
+		resizable: false,
+		height: 550,
+		width: 400,
+		show: { effect: 'drop', direction: 'up' },
+		modal: true,
+		draggable: true,
+		open: function (event, ui) {
+			$(this).load(url, function () {
+				posteando();
+			});
+		},
+		buttons: {
+			'Guardar': function () {
+				if (checasesion())
+					$('#form2').submit();
+				else
+					location.reload(true);
+			},
+			'Cancelar': function () {
+				$(this).dialog('close');
+			}
+		}
+	}).css('font-size', '.8em');
+	$('.crea').live('click', function (e) {
+		e.preventDefault();
+		if (checasesion()) {
+			url = $(this).attr('href');
+			$('#dialog-edit').dialog('open');
+		} else
+			location.reload(true);
+		return false;
+	});
+	$('.elimina').live('click', function (e) {
+		e.preventDefault();
+		if (checasesion()) {
+			if (confirm('¿Desea eliminar este detalle?')) {
+				url = $(this).attr('href');
+				$('#lcategoriadetalle').load(url);
+			}
+		} else
+			location.reload(true);
+		return false;
+	});
+	$('.dlgfixed').center(false);
+});
+
+function posteando() {
+	if ($('#OK').val() == '1') {
+		$('#dialog-edit').dialog('close');
+		$('#lcategoriadetalle').load('@Url.Action("IndexDetalle")');
+	} else {
+		$('#idtipodato').change(function () {
+			$.getJSON('/CategoriaInventario2/AtributoList/' + $('#idtipodato').val(), function (data) {
+				var items = '<option value="">Seleccionar atributo</option>';
+				$.each(data, function (i, o) {
+					items += "<option value='" + o.Value + "'>" + o.Text + "</option>";
+				});
+				$('#idatributo').html(items);
+			});
+			$.getJSON('/CategoriaInventario2/FormatoList/' + $('#idtipodato').val(), function (data) {
+				var items = '<option value="">Seleccionar formato</option>';
+				$.each(data, function (i, o) {
+					items += "<option value='" + o.Value + "'>" + o.Text + "</option>";
+				});
+				$('#idformato').html(items);
+			});
+		});
+		$('#identificador').change(function () {
+			if (this.checked && !$('#obligatorio').checked)
+				$('#obligatorio').prop('checked', true);
+		});
+	}
+}
+</script>
+}

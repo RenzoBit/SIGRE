@@ -1,0 +1,47 @@
+﻿@model IEnumerable<SIGRE.Models.Rol>
+
+@{
+    ViewBag.Title = "Roles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Roles</h2>
+
+<p>
+    @Html.ActionLink("Nuevo", "Create")
+</p>
+
+@if (Model.Count() > 0) {
+
+<table class="rvtabla">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.descripcion)
+        </th>
+        <th>Opciones</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.descripcion)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id = item.idrol })
+			@if(item.lusuario.Count() == 0) {
+			<text>|</text>
+			@Html.ActionLink("Eliminar", "Delete", new { id = item.idrol }, new { onclick = "return confirm('El rol elegido será eliminado. ¿Desea continuar?');" })
+			}
+        </td>
+    </tr>
+}
+
+</table>
+
+}

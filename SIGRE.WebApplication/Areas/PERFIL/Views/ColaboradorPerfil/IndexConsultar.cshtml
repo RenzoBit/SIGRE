@@ -1,0 +1,70 @@
+﻿@model IEnumerable<SIGRE.Models.ColaboradorPerfil>
+
+@{
+	ViewBag.Title = "Consultar asignación de perfil";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Consultar asignación de perfil</h2>
+
+@using (Html.BeginForm("IndexConsultar", "ColaboradorPerfil", FormMethod.Post, new { id = "form1" })) {
+    <fieldset>
+        <legend>Búsqueda</legend>
+		<table>
+			<tr>
+				<td>
+		<div class="editor-label">@Html.Label("Código de colaborador", new { @for = "codigo" })</div>
+				</td>
+				<td>
+        <div class="editor-field">@Html.TextBox("codigo")</div>
+				</td>
+				<td><input type="submit" value="Buscar" /></td>
+			</tr>
+		</table>
+    </fieldset>
+}
+
+@if (Model.Count() > 0) {
+<table class="rvtabla">
+	<tr>
+		<th>
+			@Html.DisplayNameFor(model => model.perfil.idcentrocosto)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.idcolaborador)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.idperfil)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.revocacion)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.aprobado)
+		</th>
+		<th>Opciones</th>
+	</tr>
+	@foreach (var item in Model) {
+	<tr>
+		<td>
+			@Html.DisplayFor(modelItem => item.perfil.unidadnegocio.nombre)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.colaborador.nombre)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.perfil.nombre)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.muestraSolicitud)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.muestraAprobado)
+		</td>
+		<td>
+			@Html.ActionLink("Ver", "EditConsultar", new { id = item.idcolaboradorperfil })
+		</td>
+	</tr>
+	}
+</table>
+}

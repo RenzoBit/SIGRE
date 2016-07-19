@@ -1,0 +1,134 @@
+﻿@model SIGRE.Models.TipoDatoAtributo
+
+@{
+	ViewBag.Title = "Editar atributo de tipo de dato";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Editar atributo de tipo de dato</h2>
+
+@using (Html.BeginForm("Edit", "TipoDatoAtributo", FormMethod.Post, new { id = "form1" })) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Editar atributo de tipo de dato</legend>
+
+        @Html.HiddenFor(model => model.idatributo)
+        @Html.HiddenFor(model => model.valorentero)
+        @Html.HiddenFor(model => model.etiqueta)
+		@if (Model.lcategoriadetalle.Count() > 0) {
+			@Html.HiddenFor(model => model.idtipodato)
+		}
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idtipodato)
+        </div>
+        <div class="editor-field">
+			@if (Model.lcategoriadetalle.Count() == 0) {
+            @Html.DropDownList("idtipodato", "Seleccionar tipo de dato")
+			} else {
+			@Html.DropDownList("idtipodato", null, "Seleccionar tipo de dato", new { disabled = "disabled" })
+			}
+            @Html.ValidationMessageFor(model => model.idtipodato)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.codigo)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.codigo, new { data_val = false })
+            @Html.ValidationMessageFor(model => model.codigo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.descripcion)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.descripcion, new { data_val = false })
+            @Html.ValidationMessageFor(model => model.descripcion)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idoperador)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("idoperador", "Seleccionar operador")
+            @Html.ValidationMessageFor(model => model.idoperador)
+        </div>
+
+		<div class="editor-label">
+            @Html.LabelFor(model => model.idreferencia)
+        </div>
+        <div id="cocodrilo1">
+        <div class="editor-field">
+            @Html.DropDownList("idreferencia", "Seleccionar valor de referencia")
+            @Html.ValidationMessageFor(model => model.idreferencia)
+        </div>
+		</div>
+		<div id="cocodrilo2">
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.valorcadena, new { @readonly = "readonly" })
+            @Html.ValidationMessageFor(model => model.valorcadena)
+        </div>
+		</div>
+
+        <p>
+            <input type="submit" value="Guardar" />
+			@Html.ActionLink("Cancelar", "Create")
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.Partial("Index", (System.Collections.Generic.List<SIGRE.Models.TipoDatoAtributo>) ViewBag.ltipodatoatributo) 
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+	<script type="text/jscript">
+		$(function () {
+		@if (Model.idtipodato == SIGRE.Models.TipoDato.TEXTO || Model.idtipodato == SIGRE.Models.TipoDato.ALFANUMERICO) {
+			@Html.Raw("$('#cocodrilo1').hide(); $('#cocodrilo2').show();")
+		} else {
+			@Html.Raw("$('#cocodrilo1').show(); $('#cocodrilo2').hide();")
+		}
+		@if (Model.idoperador > 0) {
+			@Html.Raw("$('#valorcadena').prop('readonly', false);")
+		}
+		$('#idtipodato').change(function () {
+			if ($('#idtipodato').val() == '@Html.Raw(SIGRE.Models.TipoDato.TEXTO)' || $('#idtipodato').val() == '@Html.Raw(SIGRE.Models.TipoDato.ALFANUMERICO)') {
+				$('#cocodrilo1').hide();
+				$('#cocodrilo2').show();
+			} else {
+				$('#cocodrilo1').show();
+				$('#cocodrilo2').hide();
+			}
+			$.getJSON('/TipoDatoAtributo/OperadorList/' + ($('#idtipodato').val() == '' ? '0' : $('#idtipodato').val()), function (data) {
+				var items = '<option value="">Seleccionar operador</option>';
+				$.each(data, function (i, o) {
+					items += "<option value='" + o.Value + "'>" + o.Text + "</option>";
+				});
+				$('#idoperador').html(items);
+			});
+			$('#idreferencia').html('<option value="">Seleccionar valor de referencia</option>');
+			$('#valorcadena').prop('readonly', true);
+			$('#valorcadena').val('');
+		});
+		$('#idoperador').change(function () {
+			if ($('#idoperador').val() == '') {
+				$('#valorcadena').prop('readonly', true);
+				$('#valorcadena').val('');
+			} else
+				$('#valorcadena').prop('readonly', false);
+			$.getJSON('/TipoDatoAtributo/ReferenciaList/' + ($('#idtipodato').val() == '' ? '0' : $('#idtipodato').val()), function (data) {
+				var items = '<option value="">Seleccionar valor de referencia</option>';
+				$.each(data, function (i, o) {
+					items += "<option value='" + o.Value + "'>" + o.Text + "</option>";
+				});
+				$('#idreferencia').html(items);
+			});
+		});
+	});
+	</script>
+}

@@ -1,0 +1,80 @@
+﻿@model SIGRE.Models.ColaboradorPerfil
+
+@{
+	ViewBag.Title = (Model.revocacion ? "Revocación de perfil" : "Asignación de perfil");
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@if(Model.revocacion) { @Html.Raw("Revocación de perfil") } else { @Html.Raw("Asignación de perfil") }</h2>
+<h3>@Html.Raw(ViewBag.perfil.muestraUnidadNombre)</h3>
+
+@using (Html.BeginForm("Edit2", "ColaboradorPerfil", FormMethod.Post, new { id = "form1" })) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>@if(Model.revocacion) { @Html.Raw("Revocación de perfil") } else { @Html.Raw("Asignación de perfil") }</legend>
+
+        @Html.HiddenFor(model => model.idcolaboradorperfil)
+		@Html.HiddenFor(model => model.idperfil)
+		@Html.HiddenFor(model => model.aprobado)
+		@Html.HiddenFor(model => model.idcolaborador)
+		@Html.HiddenFor(model => model.fecha)
+		@Html.HiddenFor(model => model.comentario)
+		@Html.HiddenFor(model => model.revocacion)
+
+		<div class="editor-label">
+            @Html.LabelFor(model => model.perfil.costo)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.perfil.costo, new { @readonly = "readonly" })
+            @Html.ValidationMessageFor(model => model.perfil.costo)
+        </div>
+
+        <div class="editor-label">@Html.Label("Recursos")</div>
+        <div class="editor-field">
+            @Html.ListBox("idrecurso[]", (MultiSelectList) ViewBag.idrecurso, new { disabled = "disabled", size = "8" })
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idcolaborador)
+        </div>
+        <div class="editor-field">
+			@Html.DropDownList("idcolaborador", null, "Seleccionar colaborador", new { disabled = "disabled" })
+            @Html.ValidationMessageFor(model => model.idcolaborador)
+        </div>
+
+        <p>
+            <input id="botoncito1" type="button" value="Confirmar" />
+			<input id="botoncito2" type="button" value="Rechazar" />
+        </p>
+    </fieldset>
+}
+
+<!--
+<div>
+    @Html.ActionLink("Volver", "Index", new { id = Model.idperfil })
+</div>
+-->
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+	<script type="text/javascript">
+	$(function () {
+		$('#fecha').prop('readonly', true);
+		$('#botoncito1').click(function () {
+			if (confirm('¿Está seguro que desea aprobar la ' + ($('#revocacion').val() == 'True' ? 'revocación' : 'asignación') + '?')) {
+				$('#aprobado').val(true);
+				$('#form1').submit();
+			}
+		});
+		$('#botoncito2').click(function () {
+			if (confirm('¿Está seguro que desea rechazar la ' + ($('#revocacion').val() == 'True' ? 'revocación' : 'asignación') + '?')) {
+				$('#aprobado').val(false);
+				$('#form1').submit();
+			}
+		});
+	});
+	</script>
+}

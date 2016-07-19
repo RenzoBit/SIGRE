@@ -1,0 +1,74 @@
+﻿@model SIGRE.Models.Rol
+
+@{
+	ViewBag.Title = "Editar rol";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Editar rol</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Editar rol</legend>
+
+        @Html.HiddenFor(model => model.idrol)
+        @Html.HiddenFor(model => model.dinamico)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nombre)
+        </div>
+        <div class="editor-field">
+			@Html.TextBoxFor(model => model.nombre, new { data_val = false })
+            @Html.ValidationMessageFor(model => model.nombre)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.descripcion)
+        </div>
+        <div class="editor-field">
+			@Html.TextBoxFor(model => model.descripcion, new { data_val = false })
+            @Html.ValidationMessageFor(model => model.descripcion)
+        </div>
+        <p>
+            <input type="submit" value="Guardar" />
+        </p>
+    </fieldset>
+
+<div>
+    @Html.ActionLink("Cancelar", "Index")
+	@Html.ValidationMessageFor(model => model.idrol)
+</div>
+
+<table class="rvtabla">
+    <tr>
+        <th>Menú</th>
+        <th>Opción</th>
+        <th>Acceso</th>
+    </tr>
+@for (var i = 0; i < Model.lopcion.Count(); i++)
+{
+	@Html.HiddenFor(_ => Model.lopcion[i].idopcion)
+	@Html.HiddenFor(_ => Model.lopcion[i].idsuperior)
+	@Html.HiddenFor(_ => Model.lopcion[i].link)
+	@Html.HiddenFor(_ => Model.lopcion[i].action)
+	@Html.HiddenFor(_ => Model.lopcion[i].a)
+	@Html.HiddenFor(_ => Model.lopcion[i].sesion)
+	@Html.HiddenFor(_ => Model.lopcion[i].dinamico)
+	@Html.HiddenFor(_ => Model.lopcion[i].opcionsuperior.link)
+	@Html.HiddenFor(_ => Model.lopcion[i].opcionsuperior.action)
+	<tr>
+		<td>@Html.DisplayFor(_ => Model.lopcion[i].opcionsuperior.link)</td>
+		<td>@Html.DisplayFor(_ => Model.lopcion[i].link)</td>
+		<td>@Html.EditorFor(_ => Model.lopcion[i].acceso)</td>
+	</tr>
+}
+</table>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

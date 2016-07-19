@@ -1,0 +1,52 @@
+﻿@model IEnumerable<SIGRE.Models.CategoriaDetalle>
+
+@if (Model.Count() > 0) {
+<table class="rvtabla">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.idformato)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.idatributo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.obligatorio)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.identificador)
+        </th>
+        <th>Opciones</th>
+    </tr>
+@{ int i = 0; }
+@foreach (var item in Model) {
+	i++;
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tipodatoformato.descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tipodatoatributo.muestraLabel)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.muestraObligatorio)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.muestraIdentificador)
+        </td>
+        <td>
+			@if (!item.categoriainventario.utilizada || item.idcategoriadetalle == 0) {
+				@Html.ActionLink("Editar", "CreateDetalle", new { idcategoriadetalle = item.idcategoriadetalle, idcategoriainventario = item.idcategoriainventario, posicion = i }, new { @class = "crea" })
+				@Html.Raw(" | ")
+				@Html.ActionLink("Eliminar", "DeleteDetalle", new { idcategoriadetalle = item.idcategoriadetalle, idcategoriainventario = item.idcategoriainventario, posicion = i }, new { @class = "elimina" })
+			}
+        </td>
+    </tr>
+}
+</table>
+}

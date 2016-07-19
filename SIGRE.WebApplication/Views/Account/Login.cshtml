@@ -1,0 +1,48 @@
+﻿@model SIGRE.WebApplication.Models.LoginModel
+
+@{
+    ViewBag.Title = "Iniciar sesión";
+}
+
+<hgroup class="title">
+    <h1>@ViewBag.Title</h1>
+</hgroup>
+
+@using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl })) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Iniciar sesión</legend>
+        <ol>
+            <li>
+                @Html.LabelFor(m => m.UserName)
+                @Html.TextBoxFor(m => m.UserName, new { autofocus = "true" })
+                @Html.ValidationMessageFor(m => m.UserName)
+            </li>
+            <li>
+                @Html.LabelFor(m => m.Password)
+                @Html.PasswordFor(m => m.Password)
+                @Html.ValidationMessageFor(m => m.Password)
+            </li>
+        </ol>
+        <input type="submit" value="Ingresar" />
+    </fieldset>
+    <p>
+        <a href="#" title="Para restaurar su acceso póngase en contacto con el Global Service Desk (7777)">¿No puedes acceder a tu cuenta?</a>
+    </p>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script type="text/javascript">
+$(function () {
+	@if (TempData["borra"] == "si") {
+		@Html.Raw("$('#UserName').val('');");
+	}
+	@if (ViewBag.ReturnUrl != null) {
+		@Html.Raw("alert('Su sesión expiró');");
+	}
+});
+</script>
+}

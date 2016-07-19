@@ -1,0 +1,56 @@
+﻿@model SIGRE.Models.CategoriaDetalle
+@using (Ajax.BeginForm("CreateDetalle", "CategoriaInventario2", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "dialog-edit", OnSuccess = "posteando" }, new { id = "form2" }))
+{
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <legend>Nuevo detalle de categoría de inventario</legend>
+
+		@Html.HiddenFor(model => model.idcategoriadetalle)
+		@Html.HiddenFor(model => model.idcategoriainventario)
+		@Html.Hidden("OK", (string) ViewBag.OK)
+		@Html.Hidden("posicion", (string) ViewBag.posicion)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nombre)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.nombre)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idtipodato)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("idtipodato", "Seleccionar tipo de dato")
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idformato)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("idformato", "Seleccionar formato")
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idatributo)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("idatributo", "Seleccionar atributo")
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.identificador)
+            @Html.EditorFor(model => model.identificador)
+        </div>
+        <div class="editor-field">
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.obligatorio)
+            @Html.EditorFor(model => model.obligatorio)
+        </div>
+        <div class="editor-field">
+        </div>
+    </fieldset>
+    @Html.ValidationSummary(false)
+}

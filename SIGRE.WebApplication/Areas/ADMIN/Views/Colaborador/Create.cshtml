@@ -1,0 +1,175 @@
+﻿@model SIGRE.Models.Colaborador
+
+@{
+    ViewBag.Title = "Nuevo colaborador";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Nuevo colaborador</h2>
+
+@using (Html.BeginForm("Create", "Colaborador", FormMethod.Post, new { id = "form1", enctype = "multipart/form-data" })) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Nuevo colaborador</legend>
+
+        @Html.HiddenFor(model => model.col_1)
+		@Html.HiddenFor(model => model.colaborador_idcolaborador)
+		@Html.HiddenFor(model => model.idperfil)
+		@Html.HiddenFor(model => model.idusuario)
+		@Html.HiddenFor(model => model.aprobado)
+
+        <div class="editor-label"></div>
+        <div class="editor-field"><img src="/ADMIN/Colaborador/ViewImage/0" width="100" height="100"/></div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idcolaboradortipo)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("idcolaboradortipo", "Seleccionar tipo")
+            @Html.ValidationMessageFor(model => model.idcolaboradortipo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nda)
+        </div>
+        <div class="editor-field">
+            @Html.CheckBoxFor(model => model.nda, new { onclick = "javascript: return false;" })
+            @Html.ValidationMessageFor(model => model.nda)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.codigo)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.codigo)
+            @Html.ValidationMessageFor(model => model.codigo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nombre)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.nombre)
+            @Html.ValidationMessageFor(model => model.nombre)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.correo)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.correo)
+            @Html.ValidationMessageFor(model => model.correo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.centrocosto_idcentrocosto)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("centrocosto_idcentrocosto", "Seleccionar unidad de negocio")
+            @Html.ValidationMessageFor(model => model.centrocosto_idcentrocosto)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idcentrocosto)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("idcentrocosto", "Seleccionar centro de costo")
+            @Html.ValidationMessageFor(model => model.idcentrocosto)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.colaborador_idcolaborador)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.aprobador_nombre, new { @readonly = "readonly" })
+            @Html.ValidationMessageFor(model => model.colaborador_idcolaborador)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.file)
+        </div>
+        <div class="editor-field">
+            <input type="file" name="file" id="file" />
+            @Html.ValidationMessageFor(model => model.file)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.desactivado)
+        </div>
+        <div class="editor-field">
+            @Html.CheckBoxFor(model => model.desactivado, new { onclick = "javascript: return false;" })
+            @Html.ValidationMessageFor(model => model.desactivado)
+        </div>
+
+        <p>
+            <input id="botoncito" type="button" value="Enviar a confirmación" />
+        </p>
+
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Cancelar", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+	<script type="text/jscript">
+	$(function () {
+		$('#centrocosto_idcentrocosto').change(function () {
+			var items = '<option value="">Seleccionar centro de costo</option>';
+			$('#colaborador_idcolaborador').val('');
+			$('#aprobador_nombre').val('');
+			if ($('#centrocosto_idcentrocosto').val() == '') {
+				$('#colaborador_idcolaborador').val('');
+				$('#aprobador_nombre').val('');
+				$('#idcentrocosto').html(items);
+			} else {
+				$.getJSON('/ADMIN/Colaborador/CentroCostoList/' + $('#centrocosto_idcentrocosto').val(), function (data) {
+					$.each(data, function (i, o) {
+						items += "<option value='" + o.Value + "'>" + o.Text + "</option>";
+					});
+					$('#idcentrocosto').html(items);
+				});
+			}
+		});
+		$('#idcentrocosto').change(function () {
+			if ($('#idcentrocosto').val() == '') {
+				$('#colaborador_idcolaborador').val('');
+				$('#aprobador_nombre').val('');
+			} else {
+				$.ajax({
+					url: '/ADMIN/Colaborador/Aprobador?id=' + $('#idcentrocosto').val(),
+					type: 'GET',
+					dataType: 'text',
+					success: function (data) {
+						$('#colaborador_idcolaborador').val(data.split('|')[0]);
+						$('#aprobador_nombre').val(data.split('|')[1]);
+					}
+				});
+			}
+		});
+		$('#idcolaboradortipo').change(function () {
+			if ($('#idcolaboradortipo').val() == '') {
+				$('#nda').prop('checked', false);
+				$('#nda').attr('onclick', 'javascript: return false;');
+			} else if ($('#idcolaboradortipo').val() == '1') {
+				$('#nda').prop('checked', true);
+				$('#nda').attr('onclick', 'javascript: return false;');
+			} else {
+				$('#nda').removeAttr('onclick')
+			}
+		});
+		$('#botoncito').click(function () {
+			if ($('#idcolaboradortipo').val() == '2' && !$('#nda').prop('checked'))
+				alert('Usted está intentando crear un colaborador externo sin un NDA. Por favor, confirme la existencia de un NDA para este colaborador');
+			else
+				$('#form1').submit();
+		});
+		if ($('#form1').data('validator'))
+			$('#form1').data('validator').settings.onkeyup = false;
+	});
+	</script>
+}

@@ -1,0 +1,102 @@
+﻿@model SIGRE.Models.CategoriaDetalle
+
+@{
+	ViewBag.Title = "Nuevo detalle de categoría de inventario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Nuevo detalle de categoría de inventario</h2>
+<h3>@Html.Raw(ViewBag.categoriainventario.nombre)</h3>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Nuevo detalle de categoría de inventario</legend>
+
+		@Html.HiddenFor(model => model.idcategoriainventario)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nombre)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.nombre)
+            @Html.ValidationMessageFor(model => model.nombre)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idtipodato)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("idtipodato", "Seleccionar tipo de dato")
+            @Html.ValidationMessageFor(model => model.idtipodato)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idtipodatoformato)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("idtipodatoformato", "Seleccionar formato")
+            @Html.ValidationMessageFor(model => model.idtipodatoformato)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idtipodatoatributo)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("idtipodatoatributo", "Seleccionar tipo de atributo")
+            @Html.ValidationMessageFor(model => model.idtipodatoatributo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.identificador)
+            @Html.EditorFor(model => model.identificador)
+            @Html.ValidationMessageFor(model => model.identificador)
+        </div>
+        <div class="editor-field">&nbsp;</div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.obligatorio)
+            @Html.EditorFor(model => model.obligatorio)
+            @Html.ValidationMessageFor(model => model.obligatorio)
+        </div>
+        <div class="editor-field">&nbsp;</div>
+
+        <p>
+            <input type="submit" value="Guardar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Cancelar", "Index", new { id = Model.idcategoriainventario })
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+	<script type="text/jscript">
+	$(function () {
+		$('#idtipodato').change(function () {
+			$.getJSON('/CategoriaDetalle/AtributoList/' + $('#idtipodato').val(), function(data) {
+				var items = '<option value="">Seleccionar tipo de atributo</option>';
+				$.each(data, function(i, o) {
+					items += "<option value='" + o.Value + "'>" + o.Text + "</option>";
+				});
+				$('#idtipodatoatributo').html(items);
+			});
+			$.getJSON('/CategoriaDetalle/FormatoList/' + $('#idtipodato').val(), function (data) {
+				var items = '<option value="">Seleccionar formato</option>';
+				$.each(data, function (i, o) {
+					items += "<option value='" + o.Value + "'>" + o.Text + "</option>";
+				});
+				$('#idtipodatoformato').html(items);
+			});
+		});
+		$('#identificador').change(function () {
+			if (this.checked && !$('#obligatorio').checked)
+				$('#obligatorio').prop('checked', true);
+		});
+	});
+	</script>
+}

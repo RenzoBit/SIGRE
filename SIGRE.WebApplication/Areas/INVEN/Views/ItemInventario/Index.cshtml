@@ -1,0 +1,152 @@
+﻿@model IEnumerable<SIGRE.Models.ItemInventario>
+
+@{
+    ViewBag.Title = "Ítem de inventario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Ítem de inventario</h2>
+
+<p>
+    @Html.ActionLink("Nuevo", "Create")
+</p>
+
+@using (Html.BeginForm("Index", "ItemInventario", FormMethod.Post)) {
+
+    <fieldset>
+        <legend>Búsqueda</legend>
+
+		<table>
+			<tr>
+				<td>
+		<div class="editor-label">@Html.Label("Tipo de categoría", new { @for = "idcategoriainventariotipo" })</div>
+				</td>
+				<td>
+        <div class="editor-field">@Html.DropDownList("idcategoriainventariotipo", "Todos")</div>
+				</td>
+				<td><input type="submit" value="Buscar" /></td>
+			</tr>
+			<tr>
+				<td>
+		<div class="editor-label">@Html.Label("Categoría", new { @for = "idcategoriainventario" })</div>
+				</td>
+				<td>
+        <div class="editor-field">@Html.DropDownList("idcategoriainventario", "Todas")</div>
+				</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>
+		<div class="editor-label">@Html.Label("Estado", new { @for = "tipooperacion" })</div>
+				</td>
+				<td>
+        <div class="editor-field">@Html.DropDownList("tipooperacion", "Todos")</div>
+				</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>
+		<div class="editor-label">@Html.Label("Campo", new { @for = "idcategoriadetalle" })</div>
+				</td>
+				<td>
+        <div class="editor-field">@Html.DropDownList("idcategoriadetalle", "Todos")</div>
+				</td>
+				<td></td>
+			</tr>
+			<tr>
+				<td>
+		<div class="editor-label">@Html.Label("Valor", new { @for = "valorbusqueda" })</div>
+				</td>
+				<td>
+        <div class="editor-field">@Html.Editor("valorbusqueda")</div>
+				</td>
+				<td></td>
+			</tr>
+		</table>
+    </fieldset>
+}
+
+@if (Model.Count() > 0) {
+
+<table class="rvtabla">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.descripcion)
+        </th>
+		<th>
+            @Html.DisplayNameFor(model => model.idcategoriainventario)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tipooperacion)
+        </th>
+		<th>
+            @Html.DisplayNameFor(model => model.idcolaborador)
+        </th>
+        <th>Tiene datos</th>
+        <th>Opciones</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.categoriainventario.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.muestraOperacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.colaborador.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.muestraTieneDatos)
+        </td>
+        <td>
+			@if (item.tipooperacion.Equals("B")) {
+			@Html.ActionLink("Eliminar", "Delete", new { id = item.iditeminventario }, new { onclick = "return confirm('¿Está seguro que desea eliminar el ítem seleccionado?');" })
+			} else {
+			@Html.ActionLink("Editar", "Edit", new { id = item.iditeminventario })
+				if (item.tipooperacion.Equals("D"))
+				{
+			<text> | </text>
+            @Html.ActionLink("Dar de baja", "Delete", new { id = -item.iditeminventario }, new { onclick = "return confirm('¿Está seguro que desea dar de baja al ítem seleccionado?');" })
+				}
+			<text> | </text>
+			@Html.ActionLink("Datos", "Index", new { id = item.iditeminventario, controller = "ItemInventarioDetalle" })
+			}
+        </td>
+    </tr>
+}
+
+</table>
+
+}
+	
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+	<script type="text/jscript">
+		$(function () {
+			$('#idcategoriainventariotipo').change(function () {
+				$.getJSON('/ItemInventario/CategoriaInventarioList/' + ($('#idcategoriainventariotipo').val() == '' ? '0' : $('#idcategoriainventariotipo').val()), function (data) {
+					var items = '<option value="">Todas</option>';
+					$.each(data, function (i, o) {
+						items += "<option value='" + o.Value + "'>" + o.Text + "</option>";
+					});
+					$('#idcategoriainventario').html(items);
+					$('#idcategoriadetalle').html('<option value="">Todos</option>');
+				});
+			});
+			$('#idcategoriainventario').change(function () {
+				$.getJSON('/ItemInventario/CategoriaDetalleList/' + ($('#idcategoriainventario').val() == '' ? '0' : $('#idcategoriainventario').val()), function (data) {
+					var items = '<option value="">Todos</option>';
+					$.each(data, function (i, o) {
+						items += "<option value='" + o.Value + "'>" + o.Text + "</option>";
+					});
+					$('#idcategoriadetalle').html(items);
+				});
+			});
+		});
+	</script>
+}

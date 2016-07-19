@@ -1,0 +1,97 @@
+﻿@model IEnumerable<SIGRE.Models.Colaborador>
+
+@{
+    ViewBag.Title = "Gestionar colaborador";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Gestionar colaborador</h2>
+
+<p>
+    @Html.ActionLink("Nuevo", "Create")
+</p>
+
+@using (Html.BeginForm("Index", "Colaborador", FormMethod.Post)) {
+    <fieldset>
+        <legend>Búsqueda</legend>
+
+		<table>
+			<tr>
+				<td>
+		<div class="editor-label">@Html.Label("Unidad de negocio", new { @for = "idcentrocosto" })</div>
+				</td>
+				<td>
+        <div class="editor-field">@Html.DropDownList("idcentrocosto", "Todas")</div>
+				</td>
+				<td><input type="submit" value="Buscar" /></td>
+			</tr>
+			<tr>
+				<td>
+		<div class="editor-label">@Html.Label("Nombre", new { @for = "nombre" })</div>
+				</td>
+				<td>
+        <div class="editor-field">@Html.TextBox("nombre", Session["p_nombre"] == null ? "" : Session["p_nombre"])</div>
+				</td>
+				<td></td>
+			</tr>
+		</table>
+    </fieldset>
+}
+
+@if (Model.Count() > 0) {
+
+<table class="rvtabla">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.centrocosto.centrocosto_idcentrocosto)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.idcentrocosto)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.codigo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.nombre)
+        </th>
+        <th>Estado</th>
+        <th>Opciones</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.centrocosto.unidadnegocio.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.centrocosto.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.codigo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.muestraEstado)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id = item.idcolaborador })
+			@if(item.idperfil == null) {
+			<text> | </text>
+            @Html.ActionLink("Eliminar", "Delete", new { id = item.idcolaborador }, new { onclick = "return confirm('¿Está seguro que desea eliminar el colaborador seleccionado?');" })
+			} else {
+			<text> | </text>
+				if (item.desactivado) {
+            @Html.ActionLink("Activar", "Delete", new { id = -item.idcolaborador }, new { onclick = "return confirm('¿Está seguro que desea activar el colaborador seleccionado?');" })
+				} else {
+            @Html.ActionLink("Desactivar", "Delete", new { id = -item.idcolaborador }, new { onclick = "return confirm('¿Está seguro que desea desactivar el colaborador seleccionado?');" })
+				}
+			}
+        </td>
+    </tr>
+}
+
+</table>
+	
+}

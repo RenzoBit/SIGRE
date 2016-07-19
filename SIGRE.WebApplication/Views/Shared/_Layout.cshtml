@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+    <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <meta charset="utf-8" />
+        <title>@ViewBag.Title - SIGRE</title>
+        <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+        @Styles.Render("~/Content/css")
+        @Styles.Render("~/Content/rv.css")
+        @Styles.Render("~/Content/jqsimplemenu.css")
+		@Styles.Render("~/Content/themes/base/css")
+        @Scripts.Render("~/bundles/modernizr")
+    </head>
+    <body>
+        <header>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p class="site-title">@Html.ActionLink("SIGRE", "Index", "Home", new { Area = "" }, new { })</p>
+                </div>
+                <div class="float-right">
+					<!--
+                    <section id="login">
+                        @Html.Partial("_LoginPartial")
+                    </section>
+					-->
+                    <nav>
+                        <ul class="jq-menu">
+							<li>@Html.ActionLink("Inicio", "Index", "Home", new { Area = "" }, new { })</li>
+						@if (Request.IsAuthenticated && Session["lrolopcion"] != null) {
+							foreach (SIGRE.Models.RolOpcion o1 in ((List<SIGRE.Models.RolOpcion>) Session["lrolopcion"])) {
+							@Html.Raw("<li>")
+								if (o1.opcion.a) {
+							@Html.Raw("<a href='" + o1.opcion.action + "'>" + @Html.Raw(o1.opcion.link) + "</a>")
+								} else {
+							@Html.ActionLink(o1.opcion.link, o1.opcion.action, o1.opcion.controller, new { Area = o1.opcion.area, sesion = o1.opcion.sesion }, new { })
+								}
+							@Html.Raw("<ul>")
+								foreach (SIGRE.Models.RolOpcion o2 in o1.lrolopcion) {
+							@Html.Raw("<li>")
+									if (o2.opcion.a) {
+							@Html.Raw("<a href='" + o2.opcion.action + "'>" + @Html.Raw(o2.opcion.link) + "</a>")
+									} else {
+							@Html.ActionLink(o2.opcion.link, o2.opcion.action, o2.opcion.controller, new { Area = o2.opcion.area, sesion = o2.opcion.sesion }, new { })
+									}
+							@Html.Raw("</li>")
+								}
+							@Html.Raw("</ul>")
+							@Html.Raw("</li>")
+							}
+						}
+						@if (Request.IsAuthenticated) {
+							@Html.Raw("<li><a href='#'>" + User.Identity.Name + "</a>")
+							@Html.Raw("<ul>")
+							<li>@Html.ActionLink("Cambiar contraseña", "EditPassword", "Usuario", new { Area = "SEGU" }, new { })</li>
+							using (Html.BeginForm("LogOff", "Account", new { Area = "" }, FormMethod.Post, new { id = "logoutForm" })) {
+								@Html.AntiForgeryToken()
+								<li><a href="javascript:document.getElementById('logoutForm').submit()">Salir</a></li>
+							}
+							@Html.Raw("</ul>")
+							@Html.Raw("</li>")
+						} else {
+							<li>@Html.ActionLink("Iniciar sesión", "Login", "Account", new { Area = "" }, htmlAttributes: new { id = "loginLink" })</li>
+						}
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+        <div id="body">
+            @RenderSection("featured", required: false)
+            <section class="content-wrapper main-content clear-fix">
+                @RenderBody()
+            </section>
+        </div>
+        <footer>
+            <div class="content-wrapper">
+                <div class="float-left">
+                    <p>&copy; @DateTime.Now.Year - UPC - EPE - Sistema de Gestión de Recursos Empresariales</p>
+                </div>
+            </div>
+        </footer>
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/Scripts/jqsimplemenu.js")
+        @Scripts.Render("~/Scripts/jquery.center.js")
+<script type="text/javascript">
+$(function () {
+	$('.jq-menu').jqsimplemenu();
+	@if (null != TempData["alerta"]) {
+		@Html.Raw("alert('" + @TempData["alerta"] + "');")
+	}
+	@if (null != TempData["confirma"]) {
+		@Html.Raw("if (confirm('" + @TempData["confirma"].ToString().Split('|')[0] + "')) { " + @TempData["confirma"].ToString().Split('|')[1] + " }")
+	}
+});
+function checasesion() {
+	return ($.ajax({ type: 'GET', url: '/Account/Sesion', async: false, dataType: 'text' }).responseText == '1' ? true : false);
+}
+</script>
+        @RenderSection("scripts", required: false)
+    </body>
+</html>

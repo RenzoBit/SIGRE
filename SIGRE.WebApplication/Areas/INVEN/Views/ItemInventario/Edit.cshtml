@@ -1,0 +1,155 @@
+﻿@model SIGRE.Models.ItemInventario
+
+@{
+	ViewBag.Title = "Editar ítem de inventario";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Editar ítem de inventario</h2>
+
+@using (Html.BeginForm("Edit", "ItemInventario", FormMethod.Post, new { id = "form1" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Editar ítem de inventario</legend>
+
+        @Html.HiddenFor(model => model.iditeminventario)
+		@Html.HiddenFor(model => model.fechamodificacion)
+		@Html.HiddenFor(model => model.detallemodificacion)
+		@Html.HiddenFor(model => model.tipooperacion)
+		@Html.HiddenFor(model => model.idcategoriainventario)
+		@Html.HiddenFor(model => model.idcolaborador)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idcategoriainventario)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("idcategoriainventario", null, "Seleccionar categoría", new { disabled = "disabled" })
+            @Html.ValidationMessageFor(model => model.idcategoriainventario)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.descripcion)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.descripcion)
+            @Html.ValidationMessageFor(model => model.descripcion)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idcolaborador)
+        </div>
+        <div class="editor-field">
+			@if (Model.tipooperacion == "A" || Model.tipooperacion == "P") {
+            @Html.TextBoxFor(model => model.colaborador_nombre, new { @readonly = "readonly" })
+			} else {
+            @Html.TextBoxFor(model => model.colaborador_nombre)
+			}
+            @Html.ValidationMessageFor(model => model.idcolaborador)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.prestamo)
+			@if (Model.tipooperacion == "A" || Model.tipooperacion == "P")
+			{
+				@Html.CheckBoxFor(model => model.prestamo, new { onclick = "javascript: return false;" })
+			}
+			else
+			{
+				@Html.CheckBoxFor(model => model.prestamo)
+			}
+            @Html.ValidationMessageFor(model => model.prestamo)
+        </div>
+        <div class="editor-field">
+        </div>
+
+        <p>
+            <input id="botoncito" type="button" value="Guardar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Cancelar", "Index")
+</div>
+
+<div id="grilla"></div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/jqueryui")
+
+	<script type="text/javascript">
+	$(function () {
+		grillea('0');
+		$('#colaborador_nombre').autocomplete({
+			source: function(request, response) {
+				$.ajax({
+					url: '/ItemInventario/ColaboradorList',
+					type: 'POST',
+					dataType: 'json',
+					data: { term: request.term },
+					success: function (data) {
+						response($.map(data, function (item) {
+							return {
+								label: item.codigo + ' | ' + item.nombre,
+								value: item.idcolaborador,
+								nombre: item.nombre
+							};
+						}));
+					}
+				});
+			},
+			select: function(event, ui) {
+				$('#colaborador_nombre').val(ui.item.nombre);
+				$('#idcolaborador').val(ui.item.value);
+				grillea('0');
+				return false;
+			}
+		});
+		$('#botoncito').click(function () {
+			if ($('#tipooperacion').val() == 'D' && $('#idcategoriainventario').val() != '' && $('#idcolaborador').val() != '')
+				$.ajax({
+					url: '/ItemInventario/mensajea?iditeminventario=' + $('#iditeminventario').val() + '&idcategoriainventario=' + $('#idcategoriainventario').val() + '&idcolaborador=' + $('#idcolaborador').val() + '&prestamo=' + $('#prestamo').prop('checked'),
+					type: 'GET',
+					dataType: 'text',
+					success: function (data) {
+						if (data.split('|')[0] == '0')
+							alert(data.split('|')[1]);
+						else if (data.split('|')[0] == '1')
+							$('#form1').submit();
+						else if (data.split('|')[0] == '2')
+							if (confirm(data.split('|')[1]))
+								$('#form1').submit();
+					}
+				});
+			else
+				$('#form1').submit();
+		});
+		$('#idcategoriainventario').change(function () {
+			grillea('0');
+		});
+	});
+	function grillea(iditeminventario) {
+		if ($('#idcategoriainventario').val() != '' && $('#idcolaborador').val() != '')
+			$.ajax({
+				url: '/ItemInventario/grillea?iditeminventario=' + iditeminventario + '&idcategoriainventario=' + $('#idcategoriainventario').val() + '&idcolaborador=' + $('#idcolaborador').val(),
+				type: 'GET',
+				dataType: 'text',
+				success: function (data) {
+					if (iditeminventario == $('#iditeminventario').val())
+						location.reload();
+					else
+						$('#grilla').html(data);
+				}
+			});
+	}
+	function libera(iditeminventario) {
+		if (confirm('El recurso será desvinculado del colaborador, ¿desea continuar?'))
+			grillea(iditeminventario);
+		return false;
+	}
+	</script>
+}

@@ -1,0 +1,112 @@
+﻿@model SIGRE.Models.Recurso
+
+@{
+    ViewBag.Title = "Nuevo recurso";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Nuevo recurso</h2>
+
+@using (Html.BeginForm("Create", "Recurso", FormMethod.Post, new { id = "form1", enctype = "multipart/form-data" })) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Nuevo recurso</legend>
+
+		@Html.HiddenFor(model => model.idcolaborador)
+		@Html.HiddenFor(model => model.aprobado)
+
+        <div class="editor-label"></div>
+        <div class="editor-field"><img src="/ADMIN/Recurso/ViewImage/0" width="100" height="100"/></div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nombre)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.nombre)
+            @Html.ValidationMessageFor(model => model.nombre)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.descripcion)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.descripcion)
+            @Html.ValidationMessageFor(model => model.descripcion)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.costo)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.costo)
+            @Html.ValidationMessageFor(model => model.costo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idcolaborador)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.propietario_nombre)
+            @Html.ValidationMessageFor(model => model.idcolaborador)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.file)
+        </div>
+        <div class="editor-field">
+            <input type="file" name="file" id="file" />
+            @Html.ValidationMessageFor(model => model.file)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.desactivado)
+        </div>
+        <div class="editor-field">
+            @Html.CheckBoxFor(model => model.desactivado, new { onclick = "javascript: return false;" })
+            @Html.ValidationMessageFor(model => model.desactivado)
+        </div>
+
+        <p>
+            <input type="submit" value="Enviar a validación" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Volver", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/jqueryui")
+	<script type="text/jscript">
+	$(function () {
+		$('#propietario_nombre').autocomplete({
+			source: function (request, response) {
+				$.ajax({
+					url: '/ItemInventario/ColaboradorList',
+					type: 'POST',
+					dataType: 'json',
+					data: { term: request.term },
+					success: function (data) {
+						response($.map(data, function (item) {
+							return {
+								label: item.codigo + ' | ' + item.nombre,
+								value: item.idcolaborador,
+								nombre: item.nombre
+							};
+						}));
+					}
+				});
+			},
+			select: function (event, ui) {
+				$('#propietario_nombre').val(ui.item.nombre);
+				$('#idcolaborador').val(ui.item.value);
+				return false;
+			}
+		});
+	});
+	</script>
+}

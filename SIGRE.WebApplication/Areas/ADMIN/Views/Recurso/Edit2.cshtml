@@ -1,0 +1,95 @@
+﻿@model SIGRE.Models.Recurso
+
+@{
+    ViewBag.Title = "Editar recurso";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Editar recurso</h2>
+
+@using (Html.BeginForm("Edit2", "Recurso", FormMethod.Post, new { id = "form1" })) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Editar recurso</legend>
+
+        @Html.HiddenFor(model => model.idrecurso)
+		@Html.HiddenFor(model => model.idcolaborador)
+		@Html.HiddenFor(model => model.aprobado)
+
+        <div class="editor-label"></div>
+        <div class="editor-field"><img src="/ADMIN/Recurso/ViewImage/@Model.idrecurso" width="100" height="100"/></div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.nombre)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.nombre, new { @readonly = "readonly" })
+            @Html.ValidationMessageFor(model => model.nombre)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.descripcion)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.descripcion, new { @readonly = "readonly" })
+            @Html.ValidationMessageFor(model => model.descripcion)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.costo)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.costo, new { @readonly = "readonly" })
+            @Html.ValidationMessageFor(model => model.costo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idcolaborador)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.propietario_nombre, new { @readonly = "readonly" })
+            @Html.ValidationMessageFor(model => model.idcolaborador)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.desactivado)
+        </div>
+        <div class="editor-field">
+            @Html.CheckBoxFor(model => model.desactivado, new { onclick = "javascript: return false;" })
+            @Html.ValidationMessageFor(model => model.desactivado)
+        </div>
+
+        <p>
+            <input id="botoncito1" type="button" value="Confirmar" />
+			<input id="botoncito2" type="button" value="Rechazar" />
+        </p>
+    </fieldset>
+}
+
+<!--
+<div>
+    @Html.ActionLink("Volver", "Index")
+</div>
+-->
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+	<script type="text/jscript">
+	$(function () {
+		$('#botoncito1').click(function () {
+			if (confirm('¿Está seguro que desea aprobar el recurso?')) {
+				$('#aprobado').val(true);
+				$('#form1').submit();
+			}
+		});
+		$('#botoncito2').click(function () {
+			if (confirm('¿Está seguro que desea rechazar el recurso?')) {
+				$('#aprobado').val(false);
+				$('#form1').submit();
+			}
+		});
+	});
+	</script>
+}

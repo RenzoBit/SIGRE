@@ -1,0 +1,58 @@
+﻿@model SIGRE.Models.ColaboradorPerfil
+
+@{
+	ViewBag.Title = "Nueva asignación de perfil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Nueva asignación de perfil</h2>
+<h3>@Html.Raw(ViewBag.perfil.muestraUnidadNombre)</h3>
+
+@using (Html.BeginForm("Create", "ColaboradorPerfil", FormMethod.Post, new { id = "form1" })) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Nueva asignación de perfil</legend>
+
+        @Html.HiddenFor(model => model.idperfil)
+		@Html.HiddenFor(model => model.aprobado)
+		@Html.HiddenFor(model => model.fecha)
+		@Html.HiddenFor(model => model.comentario)
+		@Html.HiddenFor(model => model.revocacion)
+		@Html.Hidden("forzar", "0")
+
+		<div class="editor-label">
+            @Html.LabelFor(model => model.perfil.costo)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.perfil.costo, new { @readonly = "readonly" })
+            @Html.ValidationMessageFor(model => model.perfil.costo)
+        </div>
+
+        <div class="editor-label">@Html.Label("Recursos")</div>
+        <div class="editor-field">
+            @Html.ListBox("idrecurso[]", (MultiSelectList) ViewBag.idrecurso, new { disabled = "disabled", size = "8" })
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idcolaborador)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("idcolaborador", "Seleccionar colaborador")
+            @Html.ValidationMessageFor(model => model.idcolaborador)
+        </div>
+
+        <p>
+            <input type="submit" value="Enviar a aprobación" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Volver", "Index", new { id = Model.idperfil })
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,46 @@
+﻿@model IEnumerable<SIGRE.Models.Colaborador>
+
+@if (Model.Count() > 0) {
+
+<table class="rvtabla">
+    <tr>
+        <th>
+            Colaborador
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.usuario.username)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.usuario.idrol)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.usuario.bloqueado)
+        </th>
+        <th>Opciones</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.usuario.username)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.usuario.rol.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.usuario.muestraBloqueado)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id = item.idusuario }) |
+			@Html.ActionLink("Eliminar", "Delete", new { id = item.idusuario }, new { onclick = "return confirm('El colaborador seleccionado ya no podrá ingresar al sistema. ¿Desea continuar?');" }) |
+            @Html.ActionLink("Clave", "Clave", new { id = item.idusuario })
+        </td>
+    </tr>
+}
+
+</table>
+	
+}

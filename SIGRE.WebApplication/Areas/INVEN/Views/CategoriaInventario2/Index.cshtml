@@ -1,0 +1,89 @@
+﻿@model IEnumerable<SIGRE.Models.CategoriaInventario>
+
+@{
+    ViewBag.Title = "Categoría de inventario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Categoría de inventario</h2>
+
+<p>
+    @Html.ActionLink("Nueva", "Create")
+</p>
+
+@using (Html.BeginForm("Index", "CategoriaInventario2", FormMethod.Post)) {
+    <fieldset>
+        <legend>Búsqueda</legend>
+		<table>
+			<tr>
+				<td>
+		<div class="editor-label">@Html.Label("Tipo de categoría", new { @for = "idcategoriainventariotipo" })</div>
+				</td>
+				<td>
+        <div class="editor-field">@Html.DropDownList("idcategoriainventariotipo", "Todos")</div>
+				</td>
+				<td><input type="submit" value="Buscar" /></td>
+			</tr>
+			<tr>
+				<td>
+		<div class="editor-label">@Html.Label("Nombre", new { @for = "nombre" })</div>
+				</td>
+				<td>
+        <div class="editor-field">@Html.TextBox("nombre", Session["p_nombre"] == null ? "" : Session["p_nombre"])</div>
+				</td>
+				<td></td>
+			</tr>
+		</table>
+    </fieldset>
+}
+
+@if (Model.Count() > 0) {
+<table class="rvtabla">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.idcategoriainventariotipo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.nombre)
+        </th>
+        <th>
+            Asignación<br />múltiple
+        </th>
+        <th>
+            Estado
+        </th>
+        <th>Opciones</th>
+    </tr>
+	@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.categoriainventariotipo.descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.muestraAsignacion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.muestraEstado)
+        </td>
+        <td>
+		@if(item.utilizada) {
+            @Html.ActionLink("Editar", "Edit", new { id = item.idcategoriainventario })
+			<text> | </text>
+			if(item.desactivado) {
+            @Html.ActionLink("Activar", "Delete", new { id = -item.idcategoriainventario }, new { onclick = "return confirm('¿Está seguro que desea activar la categoría seleccionada?');" })
+			} else {
+			@Html.ActionLink("Desactivar", "Delete", new { id = -item.idcategoriainventario }, new { onclick = "return confirm('¿Está seguro que desea desactivar la categoría seleccionada?');" })
+			}
+		} else {
+            @Html.ActionLink("Editar", "Edit", new { id = item.idcategoriainventario })
+			<text> | </text>
+            @Html.ActionLink("Eliminar", "Delete", new { id = item.idcategoriainventario }, new { onclick = "return confirm('¿Está seguro que desea eliminar la categoría seleccionada?');" })
+		}
+        </td>
+    </tr>
+	}
+</table>
+}

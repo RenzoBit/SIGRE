@@ -1,0 +1,55 @@
+﻿@model IEnumerable<SIGRE.Models.Colaborador>
+
+@{
+    ViewBag.Title = "Aprobación de colaboradores";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Aprobación de colaboradores</h2>
+
+@if (Model.Count() > 0) {
+
+<table class="rvtabla">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.centrocosto.centrocosto_idcentrocosto)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.idcentrocosto)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.codigo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.nombre)
+        </th>
+        <th>Opciones</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.centrocosto.unidadnegocio.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.centrocosto.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.codigo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.nombre)
+        </td>
+        <td>
+            @Html.ActionLink("Confirmar", "DeleteAprobar", new { id = item.idcolaborador }, new { onclick = "return confirm('¿Está seguro que desea confirmar al colaborador?');" }) | 
+            @Html.ActionLink("Rechazar", "DeleteAprobar", new { id = -item.idcolaborador }, new { onclick = "return confirm('¿Está seguro que desea rechazar al colaborador?');" }) | 
+            @Html.ActionLink("Ver", "EditAprobar", new { id = item.idcolaborador })
+        </td>
+    </tr>
+}
+
+</table>
+	
+} else {
+	@Html.Raw("No existen más aprobaciones de colaboradores pendientes")
+}

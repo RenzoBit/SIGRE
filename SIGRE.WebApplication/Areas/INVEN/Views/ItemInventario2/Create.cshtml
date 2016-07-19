@@ -1,0 +1,227 @@
+﻿@model SIGRE.Models.ItemInventario
+
+@{
+	ViewBag.Title = "Nuevo ítem de inventario";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Nuevo ítem de inventario</h2>
+
+@using (Html.BeginForm("Create", "ItemInventario2", FormMethod.Post, new { id = "form1" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Nuevo ítem de inventario</legend>
+		
+		@Html.HiddenFor(model => model.idcategoriainventario)
+		@Html.HiddenFor(model => model.idcolaborador)
+		@Html.HiddenFor(model => model.fechamodificacion)
+		@Html.HiddenFor(model => model.detallemodificacion)
+		@Html.HiddenFor(model => model.tipooperacion)
+		@Html.Hidden("forzar", "0")
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idcategoriainventario)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownList("idcategoriainventario", null, "Seleccionar categoría", new { disabled = "disabled" })
+            @Html.ValidationMessageFor(model => model.idcategoriainventario)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.descripcion)
+        </div>
+        <div class="editor-field">
+			@Html.TextBoxFor(model => model.descripcion, new { data_val = false })
+            @Html.ValidationMessageFor(model => model.descripcion)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idcolaborador)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.colaborador_nombre)
+            @Html.ValidationMessageFor(model => model.colaborador_nombre)
+        </div>
+
+		<hr style="width: 320px; margin-left: 0px; text-align: left;"/>
+
+@for(var i = 0; i < Model.liteminventariodetalle.Count(); i++) {
+		<div class="editor-label">
+			@Html.HiddenFor(_ => Model.liteminventariodetalle[i].iditeminventariodetalle)
+			@Html.HiddenFor(_ => Model.liteminventariodetalle[i].iditeminventario)
+			@Html.HiddenFor(_ => Model.liteminventariodetalle[i].idcategoriadetalle)
+			@Html.HiddenFor(_ => Model.liteminventariodetalle[i].categoriadetalle.idtipodato)
+			@Html.HiddenFor(_ => Model.liteminventariodetalle[i].categoriadetalle.idatributo)
+			@Html.HiddenFor(_ => Model.liteminventariodetalle[i].categoriadetalle.idformato)
+			@Html.HiddenFor(_ => Model.liteminventariodetalle[i].categoriadetalle.nombre)
+			@Html.HiddenFor(_ => Model.liteminventariodetalle[i].categoriadetalle.identificador)
+			@Html.HiddenFor(_ => Model.liteminventariodetalle[i].categoriadetalle.obligatorio)
+			@Html.HiddenFor(_ => Model.liteminventariodetalle[i].categoriadetalle.tipodatoformato.formato)
+			@Html.HiddenFor(_ => Model.liteminventariodetalle[i].categoriadetalle.tipodatoformato.longitud)
+			@Html.HiddenFor(_ => Model.liteminventariodetalle[i].categoriadetalle.tipodatoformato.escala)
+			@Html.HiddenFor(_ => Model.liteminventariodetalle[i].categoriadetalle.tipodatoformato.descripcion)
+			@Html.HiddenFor(_ => Model.liteminventariodetalle[i].categoriadetalle.tipodatoformato.tipo)
+			@if (Model.liteminventariodetalle[i].categoriadetalle.tipodatoatributo != null) {
+			@Html.HiddenFor(_ => Model.liteminventariodetalle[i].categoriadetalle.tipodatoatributo.codigo)
+			@Html.HiddenFor(_ => Model.liteminventariodetalle[i].categoriadetalle.tipodatoatributo.descripcion)
+			@Html.HiddenFor(_ => Model.liteminventariodetalle[i].categoriadetalle.tipodatoatributo.idoperador)
+			@Html.HiddenFor(_ => Model.liteminventariodetalle[i].categoriadetalle.tipodatoatributo.valorcadena)
+			@Html.HiddenFor(_ => Model.liteminventariodetalle[i].categoriadetalle.tipodatoatributo.valorentero)
+			@Html.HiddenFor(_ => Model.liteminventariodetalle[i].categoriadetalle.tipodatoatributo.etiqueta)
+			}
+			<label style="display:inline;">
+			@if (Model.liteminventariodetalle[i].categoriadetalle.identificador) {
+				@Html.Raw("(ID) ")
+			} else if (Model.liteminventariodetalle[i].categoriadetalle.obligatorio) {
+				@Html.Raw("( * ) ")
+			}
+			@Html.Raw(Model.liteminventariodetalle[i].categoriadetalle.nombre)
+			</label>
+			@Html.Raw(" (" + Model.liteminventariodetalle[i].categoriadetalle.tipodatoformato.descripcion + ")")
+			@if (Model.liteminventariodetalle[i].categoriadetalle.tipodatoatributo != null && Model.liteminventariodetalle[i].categoriadetalle.tipodatoatributo.idoperador != null) {
+			@Html.Raw(" (" + Model.liteminventariodetalle[i].categoriadetalle.tipodatoatributo.etiqueta + ")")
+			}
+		</div>
+		<div class="editor-field">
+			@if (Model.liteminventariodetalle[i].categoriadetalle.tipodatoformato.tipo == SIGRE.Models.TipoDatoFormato.CADENA) {
+				@Html.TextBoxFor(_ => Model.liteminventariodetalle[i].valorcadena, new { data_val = false }) 
+				@Html.ValidationMessageFor(_ => Model.liteminventariodetalle[i].valorcadena)
+			} else if (Model.liteminventariodetalle[i].categoriadetalle.tipodatoformato.tipo == SIGRE.Models.TipoDatoFormato.FECHA) {
+				@Html.TextBoxFor(_ => Model.liteminventariodetalle[i].valorfecha, "{0:dd/MM/yyyy}", new { data_val = false }) 
+				@Html.ValidationMessageFor(_ => Model.liteminventariodetalle[i].valorfecha)
+			} else if (Model.liteminventariodetalle[i].categoriadetalle.tipodatoformato.tipo == SIGRE.Models.TipoDatoFormato.ENTERO) {
+				@Html.TextBoxFor(_ => Model.liteminventariodetalle[i].valorentero, new { data_val = false }) 
+				@Html.ValidationMessageFor(_ => Model.liteminventariodetalle[i].valorentero)
+			} else if (Model.liteminventariodetalle[i].categoriadetalle.tipodatoformato.tipo == SIGRE.Models.TipoDatoFormato.DECIMAL) {
+				@Html.TextBoxFor(_ => Model.liteminventariodetalle[i].valordecimal, Model.liteminventariodetalle[i].formato, new { data_val = false }) 
+				@Html.ValidationMessageFor(_ => Model.liteminventariodetalle[i].valordecimal)
+			}
+		</div>
+}
+
+		<hr style="width: 320px; margin-left: 0px; text-align: left;"/>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.prestamo)
+            @Html.CheckBoxFor(model => model.prestamo)
+            @Html.ValidationMessageFor(model => model.prestamo)
+        </div>
+        <div class="editor-field">
+        </div>
+
+        <p>
+            <input id="botoncito" type="button" value="Guardar" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Cancelar", "Index")
+</div>
+
+<div id="grilla"></div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+	@Scripts.Render("~/bundles/jqueryui")
+
+<script type="text/javascript">
+$(function () {
+	$('[name$=".valorfecha"]').datepicker({
+		dateFormat: 'dd/mm/yy',
+		changeMonth: true,
+		changeYear: true
+	});
+	grillea('0');
+	$('#colaborador_nombre').autocomplete({
+		source: function (request, response) {
+			$.ajax({
+				url: '/ItemInventario2/ColaboradorList',
+				type: 'POST',
+				dataType: 'json',
+				data: { term: request.term },
+				success: function (data) {
+					response($.map(data, function (item) {
+						return {
+							label: item.codigo + ' | ' + item.nombre,
+							value: item.idcolaborador,
+							nombre: item.nombre
+						};
+					}));
+					$('#idcolaborador').val('');
+				}
+			});
+		},
+		select: function (event, ui) {
+			$('#colaborador_nombre').val(ui.item.nombre);
+			$('#idcolaborador').val(ui.item.value);
+			grillea('0');
+			return false;
+		}
+	});
+	$('#botoncito').click(function () {
+		if ($('#colaborador_nombre').val().length > 0)
+			$.ajax({
+				url: '/ItemInventario2/Colabora?term=' + $('#colaborador_nombre').val(),
+				type: 'GET',
+				dataType: 'text',
+				success: function (data) {
+					if (data.split('|')[0] != '0') {
+						$('#colaborador_nombre').val(data.split('|')[1]);
+						$('#idcolaborador').val(data.split('|')[0]);
+					}
+					$('#form1').submit();
+				}
+			});
+		else
+			$('#form1').submit();
+		/*
+		if ($('#form1').valid()) {
+			if ($('#tipooperacion').val() == 'D' && $('#idcategoriainventario').val() != '' && $('#idcolaborador').val() != '')
+				$.ajax({
+					url: '/ItemInventario2/mensajea?iditeminventario=0' + '&idcategoriainventario=' + $('#idcategoriainventario').val() + '&idcolaborador=' + $('#idcolaborador').val() + '&prestamo=' + $('#prestamo').prop('checked'),
+					type: 'GET',
+					dataType: 'text',
+					success: function (data) {
+						if (data.split('|')[0] == '0')
+							alert(data.split('|')[1]);
+						else if (data.split('|')[0] == '1')
+							$('#form1').submit();
+						else if (data.split('|')[0] == '2')
+							if (confirm(data.split('|')[1]))
+								$('#form1').submit();
+					}
+				});
+			else
+				$('#form1').submit();
+		}
+		*/
+	});
+	$('#idcategoriainventario').change(function () {
+		grillea('0');
+	});
+	if ($('#form1').data('validator'))
+		$('#form1').data('validator').settings.onkeyup = false;
+});
+function grillea(iditeminventario) {
+	if ($('#idcategoriainventario').val() != '' && $('#idcolaborador').val() != '')
+		$.ajax({
+			url: '/ItemInventario2/grillea?iditeminventario=' + iditeminventario + '&idcategoriainventario=' + $('#idcategoriainventario').val() + '&idcolaborador=' + $('#idcolaborador').val(),
+			type: 'GET',
+			dataType: 'text',
+			success: function (data) {
+				$('#grilla').html(data);
+			}
+		});
+}
+function libera(iditeminventario) {
+	if (confirm('El recurso será desvinculado del colaborador, ¿desea continuar?'))
+		grillea(iditeminventario);
+	return false;
+}
+</script>
+
+}

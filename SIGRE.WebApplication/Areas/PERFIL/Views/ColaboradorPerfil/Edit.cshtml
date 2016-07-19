@@ -1,0 +1,71 @@
+﻿@model SIGRE.Models.ColaboradorPerfil
+
+@{
+	ViewBag.Title = "Editar asignación";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Editar asignación</h2>
+<h3>@Html.Raw(ViewBag.perfil.muestraUnidadNombre)</h3>
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Editar asignación</legend>
+
+        @Html.HiddenFor(model => model.idcolaboradorperfil)
+		@Html.HiddenFor(model => model.idperfil)
+		@Html.HiddenFor(model => model.aprobado)
+		@Html.HiddenFor(model => model.idcolaborador)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.idcolaborador)
+        </div>
+        <div class="editor-field">
+			@Html.DropDownList("idcolaborador", null, "Seleccionar colaborador", new { disabled = "disabled" })
+            @Html.ValidationMessageFor(model => model.idcolaborador)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.fecha)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.fecha)
+            @Html.ValidationMessageFor(model => model.fecha)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.comentario)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.comentario)
+            @Html.ValidationMessageFor(model => model.comentario)
+        </div>
+
+        <p>
+		@if (Model.aprobado == null) {
+			<input type="submit" value="Enviar a aprobación" />
+  }
+  else
+  {
+			<input type="submit" value="Guardar" />
+		}
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Volver", "Index", new { id = Model.idperfil })
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+	<script type="text/javascript">
+	$(function () {
+		$('#fecha').prop('readonly', true);
+	});
+	</script>
+}

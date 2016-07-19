@@ -1,0 +1,83 @@
+﻿@model SIGRE.Models.CategoriaDetalle
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>CategoriaDetalle</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.categoriainventario.nombre)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.categoriainventario.nombre)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.tipodato.descripcion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.tipodato.descripcion)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.tipodatoatributo.descripcion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.tipodatoatributo.descripcion)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.tipodatoformato.descripcion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.tipodatoformato.descripcion)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.nombre)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.nombre)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.identificador)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.identificador)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.obligatorio)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.obligatorio)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.muestraIdentificador)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.muestraIdentificador)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.muestraObligatorio)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.muestraObligatorio)
+    </div>
+</fieldset>
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}

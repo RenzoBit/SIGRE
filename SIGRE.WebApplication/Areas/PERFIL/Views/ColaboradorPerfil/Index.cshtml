@@ -1,0 +1,91 @@
+﻿@model IEnumerable<SIGRE.Models.ColaboradorPerfil>
+
+@{
+	ViewBag.Title = "Asignar perfil";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Asignar perfil</h2>
+<h3>@Html.Raw(ViewBag.perfil.muestraUnidadNombre)</h3>
+
+<p>
+	@if (ViewBag.perfil.aprobado == true && ViewBag.perfil.desactivado == false)
+	{
+    @Html.ActionLink("Nueva", "Create")
+	<text> | </text>
+	}
+    @Html.ActionLink("Volver", "Index", new { controller = "Perfil" })
+</p>
+
+@if (Model.Count() > 0) {
+	
+<table class="rvtabla">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.colaborador.codigo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.idcolaborador)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.revocacion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.aprobado)
+        </th>
+        <th>Opciones</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.colaborador.codigo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.colaborador.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.muestraSolicitud)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.muestraAprobado)
+        </td>
+        <td>
+			@if (item.aprobado == true && item.revocacion == false) {
+            @Html.ActionLink("Revocar", "Delete", new { id = -item.idcolaboradorperfil }, new { id = "cocodrilo" })
+			} else if (item.aprobado == false) {
+            @Html.ActionLink("Eliminar", "Delete", new { id = item.idcolaboradorperfil }, new { onclick = "return confirm('¿Está seguro que desea eliminar la asignación seleccionada?');" })
+			}
+        </td>
+    </tr>
+}
+
+</table>
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+	<script type="text/javascript">
+	$('#cocodrilo').click(function (event) {
+		$.ajax({
+			url: '/PERFIL/Perfil/sepuede',
+			type: 'GET',
+			dataType: 'text',
+			async: false,
+			success: function (data) {
+				if (data == '1')
+					if (confirm('Se enviará una solicitud de revocación del perfil ¿desea continuar?'))
+						return true;
+					else
+						event.preventDefault();
+				else
+					if (confirm('No se podrá enviar la solicitud de revocación de perfil ¿desea continuar de todos modos?'))
+						return true;
+					else
+						event.preventDefault();
+			}
+		});
+	});
+	</script>
+}

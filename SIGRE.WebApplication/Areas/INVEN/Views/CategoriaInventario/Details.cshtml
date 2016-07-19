@@ -1,0 +1,58 @@
+﻿@model SIGRE.Models.CategoriaInventario
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>CategoriaInventario</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.categoriainventariotipo.descripcion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.categoriainventariotipo.descripcion)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.nombre)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.nombre)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.descripcion)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.descripcion)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.desactivado)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.desactivado)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.multiple)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.multiple)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.utilizada)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.utilizada)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.idcategoriainventario }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

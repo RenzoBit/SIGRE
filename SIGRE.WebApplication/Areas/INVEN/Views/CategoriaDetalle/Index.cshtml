@@ -1,0 +1,78 @@
+﻿@model IEnumerable<SIGRE.Models.CategoriaDetalle>
+
+@{
+	ViewBag.Title = "Detalle de categoría de inventario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Detalle de categoría de inventario</h2>
+<h3>@Html.Raw(ViewBag.categoriainventario.nombre)</h3>
+
+<p>
+	@if (!ViewBag.categoriainventario.utilizada)
+	{
+    @Html.ActionLink("Añadir", "Create")
+	<text> | </text>
+	}
+    @Html.ActionLink("Volver", "Index", new { controller = "CategoriaInventario" })
+</p>
+
+@if (Model.Count() > 0) {
+
+<table class="rvtabla">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.idtipodato)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.idtipodatoformato)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.idtipodatoatributo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.obligatorio)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.identificador)
+        </th>
+        <th>Opciones</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tipodato.descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tipodatoformato.descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tipodatoatributo.descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.muestraObligatorio)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.muestraIdentificador)
+        </td>
+        <td>
+			@if (!ViewBag.categoriainventario.utilizada)
+			{
+            @Html.ActionLink("Editar", "Edit", new { id = item.idcategoriadetalle })
+			<text> | </text>
+            @Html.ActionLink("Borrar", "Delete", new { id = item.idcategoriadetalle }, new { onclick = "return confirm('¿Desea eliminar este detalle?');" })
+			}
+        </td>
+    </tr>
+}
+
+</table>
+
+}

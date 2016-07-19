@@ -1,0 +1,45 @@
+﻿@model IEnumerable<SIGRE.Models.ColaboradorPerfil>
+
+@{
+	ViewBag.Title = "Aprobación de asignación de perfil";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Aprobación de asignación de perfil</h2>
+
+@if (Model.Count() > 0) {
+<table class="rvtabla">
+	<tr>
+		<th>
+			@Html.DisplayNameFor(model => model.idperfil)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.idcolaborador)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.perfil.costo)
+		</th>
+		<th>Opciones</th>
+	</tr>
+	@foreach (var item in Model) {
+	<tr>
+		<td>
+			@Html.DisplayFor(modelItem => item.perfil.nombre)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.colaborador.nombre)
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.perfil.costo)
+		</td>
+		<td>
+            @Html.ActionLink("Asignar", "DeleteAprobar", new { id = item.idcolaboradorperfil }, new { onclick = "return confirm('¿Está seguro que desea aprobar la asignación?');" }) | 
+            @Html.ActionLink("Rechazar", "DeleteAprobar", new { id = -item.idcolaboradorperfil }, new { onclick = "return confirm('¿Está seguro que desea rechazar la asignación?');" }) | 
+            @Html.ActionLink("Ver", "EditAprobar", new { id = item.idcolaboradorperfil })
+		</td>
+	</tr>
+	}
+</table>
+} else {
+	@Html.Raw("No existen más aprobaciones de asignación de perfil pendientes")
+}

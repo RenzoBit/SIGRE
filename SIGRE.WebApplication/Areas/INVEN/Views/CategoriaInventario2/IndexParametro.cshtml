@@ -1,0 +1,71 @@
+﻿@model IEnumerable<SIGRE.Models.CategoriaInventario>
+
+@{
+	ViewBag.Title = "Parámetros para reportes por categoría de inventario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Parámetros para reportes por categoría de inventario</h2>
+
+<p>
+    @Html.ActionLink("Nueva", "Create")
+</p>
+
+@using (Html.BeginForm("IndexParametro", "CategoriaInventario2", FormMethod.Post)) {
+    <fieldset>
+        <legend>Búsqueda</legend>
+		<table>
+			<tr>
+				<td>
+		<div class="editor-label">@Html.Label("Tipo de categoría", new { @for = "idcategoriainventariotipo" })</div>
+				</td>
+				<td>
+        <div class="editor-field">@Html.DropDownList("idcategoriainventariotipo", "Todos")</div>
+				</td>
+				<td><input type="submit" value="Buscar" /></td>
+			</tr>
+			<tr>
+				<td>
+		<div class="editor-label">@Html.Label("Nombre", new { @for = "nombre" })</div>
+				</td>
+				<td>
+        <div class="editor-field">@Html.TextBox("nombre")</div>
+				</td>
+				<td></td>
+			</tr>
+		</table>
+    </fieldset>
+}
+
+@if (Model.Count() > 0) {
+<table class="rvtabla">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.idcategoriainventariotipo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.nombre)
+        </th>
+        <th>
+            Reportes definidos
+        </th>
+        <th>Opciones</th>
+    </tr>
+	@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.categoriainventariotipo.descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.muestraCantidad)
+        </td>
+        <td>
+			@Html.ActionLink("Definir", "EditParametro", new { id = item.idcategoriainventario })
+        </td>
+    </tr>
+	}
+</table>
+}
