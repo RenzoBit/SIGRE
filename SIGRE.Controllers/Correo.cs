@@ -15,6 +15,7 @@ namespace SIGRE.Controllers
 	{
 		public static SmtpClient SMTP = new SmtpClient
 		{
+			//comentando
 			Host = "mail.inventaperu.com",
 			Port = 25,
 			Credentials = new NetworkCredential("sigre@inventaperu.com", "sigre2014")
