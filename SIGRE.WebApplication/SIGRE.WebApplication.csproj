@@ -198,6 +198,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BD\SIGRE-REV-087.sql" />
     <Content Include="Content\jqsimplemenu.css" />
     <Content Include="Content\multi-select.css" />
     <Content Include="Content\rv.css" />
